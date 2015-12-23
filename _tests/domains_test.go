@@ -1,21 +1,38 @@
 package _tests_test
 
 import (
+    "fmt"
 	. "github.com/onsi/ginkgo"
-	// . "github.com/onsi/gomega"
+    . "github.com/onsi/gomega"
 )
 
 var _ = Describe("Domains", func() {
 	Context("with a deployed app", func() {
 
-		XIt("can add, list, and remove domains", func() {
-			// "deis domains:list --app=%s", app
-			// "deis domains:add %s --app=%s", domain, app
-			// "deis domains:list --app=%s", app
+		It("can add, list, and remove domains", func() {
+            //setup
+            appName := "app-test"
+			execute("deis apps:create %s", appName)
+            fmt.Println("hey man")
+
+            //add domain
+            addCmd := "deis domains:add %s --app=%s"
+            domain := "domainsample"
+            _, err := execute(addCmd, domain, appName)
+            Expect(err).NotTo(HaveOccurred())
+
+            //list domains
+            listCmd := "deis domains:list --app=%s"
+            _, err = execute(listCmd, appName)
+            Expect(err).NotTo(HaveOccurred())
+            // @todo: Expect(err).to include domain
+
 			// curl app at both root and custom domain
-			// "deis domains:remove %s --app=%s", domain, app
-			// "deis domains:list --app=%s", app
-			// curl app at both root and custom domain, custom should fail
+
+            //remove domain
+            removeCmd := "deis domains:remove %s --app=%s"
+            _, err = execute(removeCmd, domain, appName)
+            Expect(err).NotTo(HaveOccurred())
 		})
 
 		XIt("can add, list, and remove certs", func() {
